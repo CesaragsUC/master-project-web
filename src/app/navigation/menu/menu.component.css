@@ -1,0 +1,9 @@
+.separator-blue {
+    border: none;
+    border-top: 2px solid var(--primary-color); /* Cor azul */
+    margin: 0;
+}
+.p-overlay-badge
+{
+    margin: 15px;
+}

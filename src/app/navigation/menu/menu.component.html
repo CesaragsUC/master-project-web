@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="card">
+        <p-menubar [model]="menuItems">
+            <ng-template pTemplate="item" let-item let-root="root">
+                <a pRipple class="flex align-items-center p-menuitem-link">
+                    <span [class]="item.icon"></span>
+                    <span class="ml-2" [routerLink]="item.url">{{ item.label }}</span>
+                    <p-badge *ngIf="item.badge" [ngClass]="{ 'ml-auto': !root, 'ml-2': root }" [value]="item.badge" />
+                    <span *ngIf="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{ item.shortcut }}</span>
+                    <i *ngIf="item.items" [ngClass]="['pi', root ? 'pi-angle-down ml-2' : 'pi-angle-right ml-auto']"></i>
+                </a>
+            </ng-template>
+
+            <ng-template pTemplate="end">
+
+                <div class="flex align-items-center gap-2">
+
+                    <input type="text" pInputText placeholder="Search" class="w-8rem sm:w-auto" />
+
+                    <ng-container *ngFor="let item of cartItem">
+                        <a pRipple class="flex align-items-center p-menuitem-link">
+                            <span class="ml-2" [routerLink]="item.url">{{ item.label }}</span>
+                            <span class="p-overlay-badge">
+                                <i [class]="item.icon"></i>
+                                <span *ngIf="item.badge" class="p-badge">{{ item.badge }}</span>
+                            </span>
+                            
+                        </a>
+                    </ng-container>
+
+                    <p-avatar *ngIf="!isResponsive"
+                    image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" 
+                    styleClass="mr-2" 
+                    size="xlarge" 
+                    shape="circle" 
+                    (click)="onAvatarClick($event, overlayPanel)"/>
+                    <p-overlayPanel #overlayPanel>
+                        <div class="p-2">
+                            <ul class="list-none p-0 m-0">
+
+                                <ng-container *ngFor="let item of profileItem">
+                                    <li *ngIf="item.label" class="p-2 hover:bg-gray-200 cursor-pointer text-primary font-bold" >
+                                        <i [class]="item.icon" class="mr-2"></i>
+                                        {{ item.label }}
+                                    </li>
+                    
+                                    <!-- Exibir separadores -->
+                                    <li *ngIf="item.separator" class="p-2 border-top-1 surface-border"></li>
+
+                                    <li *ngFor="let subItem of item.items" class="p-2 hover:bg-gray-200 cursor-pointer" [routerLink]="subItem.url">
+                                        <i [class]="subItem.icon" class="mr-2"></i>
+                                        {{ subItem.label }}
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </p-overlayPanel>
+                </div>
+            </ng-template>
+        </p-menubar>
+    </div>
+</div>

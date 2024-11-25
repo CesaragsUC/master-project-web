@@ -1,0 +1,85 @@
+.banner {
+    background-image: url('https://i.imgur.com/CHyoQd7.png');
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center; 
+    height: 290px;
+    width: 100%; 
+    margin-top: -70px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Cards responsivos */
+    gap: 20px; /* Espaçamento entre os cards */
+    padding: 16px; /* Padding para afastar os cards das bordas */
+  }
+  
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%; /* Garante que o card não exceda o limite */
+  }
+  
+  .product-image {
+    width: 100%;
+    height: 180px; /* Tamanho reduzido da imagem */
+    object-fit: cover; /* Ajusta a imagem ao tamanho sem distorcer */
+    border-radius: 8px; /* Bordas arredondadas para as imagens */
+    align-self: center;
+    max-width: fit-content;
+  }
+  
+  .p-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    border-radius: 8px; /* Bordas arredondadas no card */
+    overflow: hidden; /* Evita que conteúdo extrapole o card */
+  }
+  
+  .p-card-body {
+    flex-grow: 1;
+    text-align: center; /* Centraliza o texto */
+    padding: 12px; /* Padding ajustado para o conteúdo interno */
+  }
+  
+  .p-card-footer {
+    display: flex;
+    justify-content: space-evenly; /* Espaçamento uniforme entre os botões */
+    padding: 8px; /* Espaçamento do rodapé */
+  }
+  
+  .price {
+    font-size: 1.2rem; /* Tamanho ajustado do preço */
+    font-weight: bold;
+    color: #333;
+    margin: 8px 0; /* Margem ao redor do preço */
+  }
+  
+
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+    .banner {
+        height: 200px; 
+        background-size: contain;
+        margin-top: -100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner {
+        height: 150px;
+        background-size: contain;
+        margin-top: -100px;
+    }
+}
+
+@media (max-width: 320px) {
+    .banner {
+        height: 100px;
+        background-size: contain;
+        margin-top: -100px;
+    }
+}

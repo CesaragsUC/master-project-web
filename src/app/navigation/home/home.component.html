@@ -1,0 +1,91 @@
+<div class="container">
+
+  <div class="banner-container">
+    <div class="banner"></div>
+  </div>
+
+  <p-carousel 
+      [value]="products" 
+      [numVisible]="3" 
+      [numScroll]="3" 
+      [circular]="true" 
+      [responsiveOptions]="responsiveOptions" 
+      autoplayInterval="3000">
+          <ng-template let-product pTemplate="item">
+                  <div class="border-1 surface-border border-round m-2 p-3">
+                      <div class="mb-3">
+                          <div class="relative mx-auto">
+                              <img 
+                                  src="{{ product.image }}" 
+                                  [alt]="product.name" 
+                                  class="w-full border-round" />
+                              <p-tag 
+                                  [value]="product.inventoryStatus" 
+                                  [severity]="getSeverity(product.inventoryStatus)" 
+                                  class="absolute" 
+                                  [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+                          </div>
+                      </div>
+                      <div class="mb-3 font-medium">
+                          {{ product.name }}
+                      </div>
+                      <div class="flex justify-content-between align-items-center">
+                      <div class="mt-0 font-semibold text-xl">
+                          {{ '$' + product.price }}
+                      </div>
+                          <span>
+                              <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
+                              <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
+                          </span>
+                      </div>
+                  </div>
+          </ng-template>
+  </p-carousel>
+
+  <div class="mb-4">
+    <div class="p-4 text-center surface-100 border-round shadow-2">
+      <h2 class="text-primary font-bold">Welcome to Our Store!</h2>
+      <p class="mt-2 text-secondary">
+        Discover our exclusive collection of products and enjoy the best deals of the season.
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let product of products">
+        <div class="p-card p-shadow-2">
+          <img
+            src="{{ product.image }}"
+            alt="{{ product.name }}"
+            class="product-image"
+          />
+          <div class="p-card-body">
+            <h4>{{ product.name }}</h4>
+            <p class="price">{{ '$' + product.price }}</p>
+            <p-tag
+              [value]="product.inventoryStatus"
+              [severity]="getSeverity(product.inventoryStatus)"
+            ></p-tag>
+          </div>
+          <div class="p-card-footer">
+            <p-button
+              label="Details"
+              icon="pi pi-info-circle"
+              (click)="viewDetails(product)"
+            ></p-button>
+            <p-button
+              label="Add to Cart"
+              icon="pi pi-shopping-cart"
+              class="p-ml-2"
+              (click)="addToCart(product)"
+            ></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
