@@ -1,0 +1,16 @@
+import { Injectable } from "@angular/core";
+
+@Injectable()
+export class LoginValidationService {
+    
+    // private validationMessages: ValidationMessages = LoginValidationMessagesConfig;
+    // private genericValidator: GenericValidator;
+
+    // constructor() {
+    //     this.genericValidator = new GenericValidator(this.validationMessages);
+    // }
+
+    // getValidator(): GenericValidator {
+    //     return this.genericValidator;
+    // }
+}

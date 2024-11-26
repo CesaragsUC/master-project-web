@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuComponent } from './navigation/menu/menu.component';
 import { FooterComponent } from './navigation/footer/footer.component';
+import { AccountService } from './services/account/account.service';
+import { AuthService } from './services/account/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,7 @@ import { FooterComponent } from './navigation/footer/footer.component';
     RouterModule,
     MenuComponent,
     FooterComponent],
+    providers: [AccountService,AuthService],
   templateUrl: './app.component.html'
 })
 export class AppComponent {

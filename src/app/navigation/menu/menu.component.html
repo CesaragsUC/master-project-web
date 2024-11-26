@@ -1,6 +1,7 @@
 <div class="container">
     <div class="card">
-        <p-menubar [model]="menuItems">
+
+        <p-menubar *ngIf="isLoggedIn"  [model]="adminMenu">
             <ng-template pTemplate="item" let-item let-root="root">
                 <a pRipple class="flex align-items-center p-menuitem-link">
                     <span [class]="item.icon"></span>
@@ -52,9 +53,41 @@
                                         {{ subItem.label }}
                                     </li>
                                 </ng-container>
+                                <li>
+                                    <a class="nav-link text-dark" href="#" (click)="logout()">Logout
+                                        <span class="pi pi-sign-out"></span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </p-overlayPanel>
+                </div>
+            </ng-template>
+        </p-menubar>
+        
+        <p-menubar *ngIf="!isLoggedIn"  [model]="menuItems">
+            <ng-template pTemplate="item" let-item let-root="root">
+                <a pRipple class="flex align-items-center p-menuitem-link">
+                    <span [class]="item.icon"></span>
+                    <span class="ml-2" [routerLink]="item.url">{{ item.label }}</span>
+                    <p-badge *ngIf="item.badge" [ngClass]="{ 'ml-auto': !root, 'ml-2': root }" [value]="item.badge" />
+                    <span *ngIf="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{ item.shortcut }}</span>
+                    <i *ngIf="item.items" [ngClass]="['pi', root ? 'pi-angle-down ml-2' : 'pi-angle-right ml-auto']"></i>
+                </a>
+            </ng-template>
+
+            <ng-template pTemplate="end">
+                <div  *ngIf="!isResponsive" class="flex align-items-center gap-2">
+                    <ng-container  *ngFor="let item of menuLogin">
+                        <a pRipple class="flex align-items-center p-menuitem-link">
+                            <span class="ml-2" [routerLink]="item.url">{{ item.label }}</span>
+                            <span class="p-overlay-badge">
+                                <i [class]="item.icon"></i>
+                                <span *ngIf="item.badge" class="p-badge">{{ item.badge }}</span>
+                            </span>
+                            
+                        </a>
+                    </ng-container>
                 </div>
             </ng-template>
         </p-menubar>

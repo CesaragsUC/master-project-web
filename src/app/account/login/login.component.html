@@ -1,0 +1,31 @@
+
+<div class="login-container">
+    <h1>Welcome</h1>
+    <div class="profile-picture">
+        <img src="/assets/user-login-avatar.png" alt="Profile Picture">
+    </div>
+
+    <form novalidate (ngSubmit)="login()" [formGroup]="loginForm">
+
+        <div class="alert alert-danger" *ngIf="errors.length > 0">
+            <h5 id="msgRetorno">Ops! Somethings went a wrong:</h5>
+            <ul>
+                <li *ngFor="let error of errors">{{ error }}</li>
+            </ul>
+        </div>
+
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="email" id="email" placeholder="email" formControlName="email">
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" formControlName="password">
+        </div>
+        <button type="submit" class="login-button">LOGIN</button>
+    </form>
+    <div class="links">
+        <a href="#">Forgot <span>Username</span> / <span>Password</span>?</a><br>
+        <a href="#">Don't have an account? <span>Sign up</span></a>
+    </div>
+</div>

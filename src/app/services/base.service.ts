@@ -21,7 +21,7 @@ export abstract class BaseService {
         return {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.localStorage.obterTokenUsuario()}`
+                'Authorization': `Bearer ${this.localStorage.getUserToken()}`
             })
         };
     }

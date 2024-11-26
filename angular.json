@@ -29,7 +29,12 @@
               "polyfills": ["zone.js"],
               "tsConfig": "tsconfig.app.json",
               "inlineStyleLanguage": "scss",
-              "assets": ["src/assets"],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public"
+                }
+              ],
               "styles": [
                 "src/styles.scss",
                 "node_modules/primeicons/primeicons.css",
@@ -94,7 +99,12 @@
               "tsConfig": "tsconfig.spec.json",
               "karmaConfig": "karma.conf.js",
               "inlineStyleLanguage": "scss",
-              "assets": ["src/assets"],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public"
+                }
+              ],
               "stylePreprocessorOptions": {
                 "includePaths": ["node_modules/"]
               },
