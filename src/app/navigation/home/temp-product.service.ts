@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
     
-@Injectable()
-export class ProductService {
+@Injectable({ providedIn: 'root' })
+export class FakeProductService {
     getProductsData() 
     {
         return [

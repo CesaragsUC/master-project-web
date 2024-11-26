@@ -1,1 +1,53 @@
-<p>add works!</p>
+<div class="container">
+    <form novalidate (ngSubmit)="createProduct()"  [formGroup]="productForm">
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="nome">Name</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="name" type="text" formControlName="name"  />
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Price</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="price" type="text" formControlName="price" />
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <p-checkbox 
+                id="active" 
+                formControlName="active" 
+                [binary]="true"
+                inputId="binary" />
+               <label for="ny">&nbsp;&nbsp;Active</label>
+            </div>
+            <br>
+        </div>
+
+        <div class="card">
+            <p-toast />
+            <p-fileUpload 
+            name="demo[]" 
+            url="https://www.primefaces.org/cdn/api/upload.php" 
+            (onUpload)="onUpload($event)" 
+            [multiple]="true" 
+            accept="image/*" 
+            maxFileSize="5000000">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">
+                            {{ file.name }} - {{ file.size }} bytes
+                        </li>
+                    </ul>
+                    </ng-template>
+            </p-fileUpload>
+        </div>
+
+        <div class="form-group">
+            <p-button type="submit"  label="Salvar" severity="info"></p-button>
+        </div>
+    </form>
+</div>

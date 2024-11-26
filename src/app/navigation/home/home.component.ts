@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { ProductService } from './temp-product.service';
 import { ImportsModule } from 'src/app/imports';
+import { Product } from 'src/app/models/product/product';
+import { FakeProductService } from './temp-product.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [ImportsModule],
-  providers: [ProductService],
+  providers: [FakeProductService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -16,7 +17,7 @@ export class HomeComponent {
 
   responsiveOptions: any[] | undefined;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: FakeProductService) {}
 
   
   ngOnInit() {
@@ -61,16 +62,4 @@ export class HomeComponent {
   addToCart(product: any) {
     console.log('Add to cart:', product.name);
   }
-}
-export interface Product {
-  id?: string;
-  code?: string;
-  name?: string;
-  description?: string;
-  price?: number;
-  quantity?: number;
-  inventoryStatus?: string;
-  category?: string;
-  image?: string;
-  rating?: number;
 }

@@ -14,7 +14,7 @@ import { AuthService } from './services/account/auth.service';
     RouterModule,
     MenuComponent,
     FooterComponent],
-    providers: [AccountService,AuthService],
+  providers: [AccountService,AuthService],
   templateUrl: './app.component.html'
 })
 export class AppComponent {

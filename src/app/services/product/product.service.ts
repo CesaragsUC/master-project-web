@@ -4,8 +4,8 @@ import { HttpClient } from "@angular/common/http";
 import { Product } from "../../models/product/product";
 import { catchError, map, Observable } from "rxjs";
 
-@Injectable()
-export class ProdutoService extends BaseService {
+@Injectable({ providedIn: 'root' })
+export class ProductService extends BaseService {
     
     constructor(private http: HttpClient) { super() }
 
