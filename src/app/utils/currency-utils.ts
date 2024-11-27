@@ -19,4 +19,32 @@ export class CurrencyUtils {
         }
         return ret;
     }
+
+    public static StringToInteger(input:any): any {
+        if (input === null || input === undefined) {
+            return 0;
+        }
+    
+        if (typeof input !== 'string') {
+            input = input.toString();
+        }
+    
+        return parseInt(input.replace(/\./g, ''), 10);
+    }
+
+    public static IntegerToString(input:any): any {
+        return input.toString().replace(".", ",");
+    }
+
+    public static IntegerToDecimal(input:any): any {
+        if (input === null || input === undefined) {
+            return 0; 
+        }
+
+        if (typeof input !== 'string') {
+            input = input.toString(); 
+        }
+
+        return parseFloat(input.replace(/\./g, '').replace(',', '.'));
+    }
 }

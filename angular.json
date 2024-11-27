@@ -39,7 +39,8 @@
                 "src/styles.scss",
                 "node_modules/primeicons/primeicons.css",
                 "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-                "node_modules/primeng/resources/primeng.min.css"
+                "node_modules/primeng/resources/primeng.min.css",
+                "node_modules/ngx-spinner/animations/ball-scale-multiple.css"
               ],
               "stylePreprocessorOptions": {
                 "includePaths": ["node_modules/"]
@@ -112,7 +113,8 @@
                 "src/styles.scss",
                 "node_modules/primeicons/primeicons.css",
                 "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-                "node_modules/primeng/resources/primeng.min.css"
+                "node_modules/primeng/resources/primeng.min.css",
+                "node_modules/ngx-spinner/animations/ball-scale-multiple.css"
               ],
               "scripts": [],
               "allowedCommonJsDependencies": [

@@ -7,6 +7,7 @@
     quantity?: number;
     inventoryStatus?: string;
     category?: string;
-    image?: string;
+    active?: boolean;
+    imageUri?: string;
     rating?: number;
   }

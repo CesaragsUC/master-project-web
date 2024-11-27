@@ -2,6 +2,8 @@ import { HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { throwError } from "rxjs";
 import { Dev } from "../environments/variables";
 import { LocalStorageData } from "../utils/localstorage";
+import { ApiResponse } from "./api-response/base.response";
+
 
 
 export abstract class BaseService {
@@ -30,6 +32,10 @@ export abstract class BaseService {
         return response.data || {};
     }
 
+    protected extractApiResponse(response: ApiResponse) {
+        return response || {};
+    }
+    
     protected serviceError(response: Response | any) {
         let customError: string[] = [];
         let customResponse: { error: { errors: string[] }} = { error: { errors: [] }}

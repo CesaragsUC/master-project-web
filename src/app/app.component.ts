@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuComponent } from './navigation/menu/menu.component';
 import { FooterComponent } from './navigation/footer/footer.component';
@@ -15,7 +15,8 @@ import { AuthService } from './services/account/auth.service';
     MenuComponent,
     FooterComponent],
   providers: [AccountService,AuthService],
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppComponent {
   title = 'master-project-front';

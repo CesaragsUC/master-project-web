@@ -10,4 +10,14 @@ export class StringUtils {
     public static OnlyNumbers(numero: string) : string {
         return numero.replace(/[^0-9]/g,'');
     }
+
+
+    public static StringToBoolean(input: string): boolean {
+
+        if (input === 'true') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
