@@ -1,6 +1,6 @@
-import { User } from "./usuario";
+import { User } from "../user/usuario";
 
-export interface UserLogin {
+export interface LoginRequest {
     id: string;
     email: string;
     password: string;

@@ -1,3 +1,5 @@
+import { LoginResponse, UserToken } from "../models/login/login.response";
+
 export class LocalStorageData {
     
     public getUser() {
@@ -5,10 +7,15 @@ export class LocalStorageData {
         return user ? JSON.parse(user) : null;
     }
 
-    public saveLocalUserData(response: any) {
-        this.saveUserToken(response.access_token);
-        this.saveUserRefreshToken(response.refresh_token);
-        this.saveUser(response.user);
+    public getLoggedUser() : LoginResponse {
+        const user = localStorage.getItem('casoft.user');
+        return user ? JSON.parse(user) : null;
+    }
+
+    public saveLocalUserData(response: LoginResponse) {
+        this.saveUserToken(response.accessToken);
+        this.saveUserRefreshToken(response.refreshToken);
+        this.saveUser(response.userToken);
     }
 
     public clearLocaluserData() {
@@ -32,7 +39,7 @@ export class LocalStorageData {
     public saveUserRefreshToken(refresToken: string) {
         localStorage.setItem('casoft.refresh_token', refresToken);
     }
-    public saveUser(user: string) {
+    public saveUser(user: UserToken) {
         localStorage.setItem('casoft.user', JSON.stringify(user));
     }
 

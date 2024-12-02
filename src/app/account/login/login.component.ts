@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { UserLogin } from 'src/app/models/user/user.login';
+import { LoginRequest } from 'src/app/models/login/user.login';
 import { AccountService } from 'src/app/services/account/account.service';
 import { ToastModule } from 'primeng/toast';
 import { ImportsModule } from 'src/app/imports';
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   errors: any[] = [];
   loginForm!: FormGroup;
-  userLogin!: UserLogin;
+  userLogin!: LoginRequest;
   returnUrl: string;
 
   constructor(private fb: FormBuilder,

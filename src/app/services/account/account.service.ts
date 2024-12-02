@@ -3,9 +3,10 @@ import { BaseService } from "../base.service";
 import { HttpClient } from "@angular/common/http";
 import { User } from "src/app/models/user/usuario";
 import { catchError, map, Observable } from "rxjs";
-import { UserLogin } from "src/app/models/user/user.login";
+import { LoginRequest } from "src/app/models/login/user.login";
+import { LoginResponse } from "src/app/models/login/login.response";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AccountService extends BaseService {
     
     constructor(private http: HttpClient) { super() }
@@ -17,7 +18,7 @@ export class AccountService extends BaseService {
         return response;
     }
 
-    login(usuario: UserLogin): Observable<User> {
+    login(usuario: LoginRequest): Observable<LoginResponse> {
         let response = this.http
             .post(this.urlService + 'auth/login', usuario, this.getHeaderJson())
             .pipe(

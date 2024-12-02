@@ -1,5 +1,6 @@
 <div class="container main-container">
-    <div class="row text-center error-msg">
-        <h2 class="text-danger">Acesso Negado!</h2>
-    </div>
+    <p-messages 
+    [(value)]="messages" 
+    [enableService]="false" 
+    [closable]="false" />
 </div>

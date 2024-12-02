@@ -3,6 +3,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, ViewChild } from '@a
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
+import { Location } from '@angular/common';
 import { FileUploadEvent, UploadEvent } from 'primeng/fileupload';
 import { ImportsModule } from 'src/app/imports';
 import { ProductAdd } from 'src/app/models/product/product.create';
@@ -34,7 +35,8 @@ export class ProductAddComponent  implements OnInit {
     private config: PrimeNGConfig,
      private messageService: MessageService,
     private productService: ProductService,
-    private router: Router) {
+    private router: Router,
+    private location: Location) {
     this.productForm = this.fb.group({
       name: [''],
       price: [''],
@@ -153,8 +155,12 @@ export class ProductAddComponent  implements OnInit {
     ? errorMessages.map((msg: string) => `- ${msg}`).join('\n') 
     : 'An unexpected error occurred.';
 
-    this.messages = [
-        { severity: 'error', summary: 'Failed to create product', detail: detailMessage }
-    ];
-}
+      this.messages = [
+          { severity: 'error', summary: 'Failed to create product', detail: detailMessage }
+      ];
+  }
+
+  backPreviousPage() {
+    this.location.back();
+  }
 }
