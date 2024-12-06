@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ImportsModule } from 'src/app/imports';
 import { Product } from 'src/app/models/product/product';
 import { FakeProductService } from 'src/app/navigation/home/temp-product.service';
 import { Location } from '@angular/common';
+import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { ProductService } from 'src/app/services/product/product.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule,ImportsModule],
+  imports: [CommonModule,ImportsModule,NgxSpinnerComponent],
   providers: [FakeProductService],
   selector: 'app-details',
   templateUrl: './details.component.html',
@@ -15,15 +19,31 @@ import { Location } from '@angular/common';
 })
 export class ProductDetailsComponent {
 
-  products: Product[] | undefined;
-  constructor(private productService: FakeProductService,private location: Location) {}
+  product: Product | undefined;
+
+  constructor(private productService: ProductService,
+    private location: Location,
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    
+    this.product = this.route.snapshot.data['product'].data;
+  }
+
+  spinner = inject(NgxSpinnerService);
 
   ngOnInit() {
 
-       this.productService.getProductsSmall().then((products) => {
-           this.products = products;
-       });
+    this.spinner.show();
 
+      //  this.productService.getById(this.product.productId).then((p) => {
+      //      this.product = p;
+      //  });
+   
+       setTimeout(() => {
+           this.spinner.hide();
+       }, 1000);
    }
 
    getSeverity(status: string) {

@@ -3,5 +3,7 @@ export interface ProductUpdate {
     name?: string;
     price?: number;
     active?: boolean;
+    imageUri?: string;
     imageBase64?: string;
+    productId?: string;
 }

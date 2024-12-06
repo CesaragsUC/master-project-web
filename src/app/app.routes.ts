@@ -16,7 +16,7 @@ export const routes: Routes = [
     {
         path: 'products',
         loadChildren: () => import('./product/module/product.module') //lazy loading
-         .then(m => m.ProdutoModule),
+         .then(m => m.ProductModule),
          canMatch: [AdminCanMatchGuard], // canMatch verifica se o usuário tem permissão para acessar a rota
          canActivate: [IsAdminCanActivateGuard, isLogged] ,
          canActivateChild: [IsAdminCanActivateChildGuard, isLogged], //canActivateChild verifica se o usuário tem permissão para acessar as rotas filhas
