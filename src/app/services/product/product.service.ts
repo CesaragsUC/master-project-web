@@ -59,7 +59,7 @@ export class ProductService extends BaseService {
 
     deleteProduct(id: string): Observable<ApiResponse> {
         return this.http
-            .delete(this.urlService + "product/delete" + id, super.getAuthHeaderJson())
+            .delete(this.urlService + "product/delete?id=" + id, super.getAuthHeaderJson())
             .pipe(
                 map(super.extractApiResponse),
                 catchError(super.serviceError));

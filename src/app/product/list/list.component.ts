@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
 import { ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { filterByDirections, FilterByOrder, FilterByStatus, orderByDirections, orderByOptions, ProductFilter, statusOptions } from 'src/app/dtos/product.filter';
@@ -46,7 +47,8 @@ export class ProductListComponent {
   constructor(private productService: ProductService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private router: Router,) {}
 
     spinner = inject(NgxSpinnerService);
 
@@ -65,24 +67,7 @@ export class ProductListComponent {
             maxPrice: ['']
           });
 
-        this.productService.getAll().subscribe({
-            next: (result) => {
-            if (result.success && Array.isArray(result.data)) {
-                this.products = result.data.map(prod => ({
-                ...prod,
-                inventoryStatus: prod.active ? 'INSTOCK' : 'OUTOFSTOCK',
-                imageUri: prod.imageUri && prod.imageUri.trim() !== '' ? prod.imageUri : '/assets/no-image.jpg',
-                }));
-
-                this.totalItems = result.totalItems;
-                this.totalPages = result.totalPages;
-                //console.error('productsArray', result);
-            } else {
-                console.error('Failed to load products:', result.message);
-            }
-            },
-            error: (err) => console.error('Error fetching products:', err),
-        });
+        this.getallProducts();
 
         this.sortOptions = [
             { label: 'Price High to Low', value: '!price' },
@@ -162,15 +147,24 @@ export class ProductListComponent {
       }
     }
 
-    confirmDelete() {
+    confirmDelete(id:string) {
         this.confirmationService.confirm({
             header: 'Are you sure?',
             message: 'Please confirm to proceed.',
             accept: () => {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product deleted', life: 3000 });
+
+                this.spinner.show();
+                this.productService.deleteProduct(id).subscribe({
+                    next: (sucesso: any) => { this.processSuccessDelete(sucesso) },
+                    error: (falha: any) => { this.processFailDelete(falha) }
+                });
+
+                setTimeout(() => {
+                    this.spinner.hide();
+                }, 1000);
             },
             reject: () => {
-                this.messageService.add({ severity: 'contrast', summary: 'Canceled', detail: 'Operation canceled', life: 3000 });
+                this.messageService.add({ severity: 'contrast', summary: 'Canceled', detail: 'Deletion cancelled', life: 3000 });
             }
         });
     }
@@ -186,8 +180,8 @@ export class ProductListComponent {
           this.productFilter.minPrice = CurrencyUtils.IntegerToDecimal(this.productFilter.minPrice);
 
           this.productService.getAll(this.productFilter).subscribe({
-              next: (sucesso: any) => { this.processarSucesso(sucesso) },
-              error: (falha: any) => { this.processarFalha(falha) }
+              next: (sucesso: any) => { this.processSuccess(sucesso) },
+              error: (falha: any) => { this.processFail(falha) }
           });
         }
     
@@ -196,7 +190,7 @@ export class ProductListComponent {
         }, 1000);
     }
 
-    processarSucesso(response:any)
+    processSuccess(response:any)
     {
         if (response.succeeded) 
         {
@@ -204,7 +198,7 @@ export class ProductListComponent {
         }
     }
 
-    processarFalha(response:any)
+    processFail(response:any)
     {
         const errorMessages = response.error?.errors;
 
@@ -216,6 +210,34 @@ export class ProductListComponent {
             { severity: 'error', summary: 'Failed to create product', detail: detailMessage }
         ];
     }
+
+    processSuccessDelete(response:any)
+    {
+        if (response.succeeded) 
+        {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product deleted', life: 3000 });
+            this.getallProducts();
+
+        }
+    }
+
+    processFailDelete(response:any)
+    {
+        const errorMessages = response.error?.errors;
+
+        const detailMessage = Array.isArray(errorMessages) 
+        ? errorMessages.map((msg: string) => `- ${msg}`).join('\n') 
+        : 'An unexpected error occurred.';
+
+        this.messageService.add({ severity: 'error', summary: 'Failed to delete product', detail: 'Fail to deleted', life: 3000 });
+        
+        this.messages = [
+            { severity: 'error', summary: 'Failed to delete product', detail: detailMessage }
+        ];
+
+        this.router.navigate(['/products']);
+    }
+
 
     initializeFilter() {
         this.productFilter = {
@@ -231,5 +253,36 @@ export class ProductListComponent {
 
         this.page = 1;
         this.pageSize = 10;
+    }
+
+    clearFilter() {
+        this.filterForm.reset();
+        this.initializeFilter();
+        this.applyFilter();
+    }
+
+    getallProducts()
+    {
+        this.productService.getAll().subscribe({
+            next: (result) => {
+            if (result.success && Array.isArray(result.data)) {
+                this.products = result.data.map(prod => ({
+                ...prod,
+                inventoryStatus: prod.active ? 'INSTOCK' : 'OUTOFSTOCK',
+                imageUri: prod.imageUri && prod.imageUri.trim() !== '' ? prod.imageUri : '/assets/no-image.jpg',
+                id: prod.id,
+                }));
+
+                this.totalItems = result.totalItems;
+                this.totalPages = result.totalPages;
+                // console.error('result', result);
+                // console.error('productsArray', this.products);
+              
+            } else {
+                console.error('Failed to load products:', result.message);
+            }
+            },
+            error: (err) => console.error('Error fetching products:', err),
+        });
     }
 }

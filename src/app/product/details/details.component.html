@@ -1,5 +1,12 @@
 <div class="container">
 
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" 
+    size = "medium" color = "#fff" 
+    type = "ball-scale-multiple" 
+    [fullScreen] = "true">
+    <p style="color: white" > Loading... </p>
+    </ngx-spinner>
+
     <div class="form-horizontal">
 
             <div class="form-group">
@@ -8,6 +15,7 @@
                 type="text"
                 placeholder="Name"
                 pInputText 
+                [value]="product?.name"
                 [disabled]="true" />
             </div>
             <br>
@@ -17,6 +25,7 @@
                 type="text"
                 placeholder="Price"
                 pInputText 
+                [value]="product?.price"
                 [disabled]="true" />
             </div>
             <br>
@@ -25,6 +34,8 @@
                 <div class="col-md-10">
                     <p-checkbox 
                     [binary]="true" 
+                    [ngModel]="product?.active" 
+                    [disabled]="true"
                     inputId="binary" />
                 </div>
             </div>
@@ -33,7 +44,7 @@
                 <label class="col-md-2 control-label">Product Images</label>
                 <div class="col-md-10">
                     <p-image 
-                        src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" 
+                        [src]="product?.imageUri" 
                         alt="Image" 
                         width="250" 
                         [preview]="true" />

@@ -28,7 +28,7 @@ export class ProductAddComponent  implements OnInit {
   errors: any[] = [];
   productForm :FormGroup;
   checked: boolean = true;
-  produto!: ProductAdd;
+  product!: ProductAdd;
   messages: Message[] | undefined;
   
   constructor(private fb: FormBuilder,
@@ -68,14 +68,14 @@ export class ProductAddComponent  implements OnInit {
 
     if (this.productForm.dirty && this.productForm.valid)
     {
-      this.produto = Object.assign({}, this.produto, this.productForm.value);
+      this.product = Object.assign({}, this.product, this.productForm.value);
 
       this.convertBlobToBase64(this.uploadedFiles);
 
-      this.produto.imageBase64 =  this.base64List[0];
-      this.produto.price = CurrencyUtils.IntegerToDecimal(this.produto.price);
+      this.product.imageBase64 =  this.base64List[0];
+      this.product.price = CurrencyUtils.IntegerToDecimal(this.product.price);
 
-      this.productService.addProduct(this.produto)
+      this.productService.addProduct(this.product)
         .subscribe({
           next: (sucesso: any) => { this.processarSucesso(sucesso) },
           error: (falha: any) => { this.processarFalha(falha) }
