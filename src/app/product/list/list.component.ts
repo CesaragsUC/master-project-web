@@ -192,9 +192,16 @@ export class ProductListComponent {
 
     processSuccess(response:any)
     {
-        if (response.succeeded) 
+        if (response.success) 
         {
+            this.products = response.data.map((prod: any) => ({
+                ...prod,
+                inventoryStatus: prod.active ? 'INSTOCK' : 'OUTOFSTOCK',
+                imageUri: prod.imageUri && prod.imageUri.trim() !== '' ? prod.imageUri : '/assets/no-image.jpg',
+            }));
 
+            this.totalItems = response.totalItems;
+            this.totalPages = response.totalPages;
         }
     }
 
