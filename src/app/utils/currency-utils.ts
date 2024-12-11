@@ -1,7 +1,7 @@
 export class CurrencyUtils {
 
     public static StringToDecimal(input:any): any {
-        if (input === null) return 0;
+        if (input === null || input === undefined  || input === '') return 0;
 
         input = input.replace(/\./g, '');
         input = input.replace(/,/g, '.');
@@ -21,7 +21,7 @@ export class CurrencyUtils {
     }
 
     public static StringToInteger(input:any): any {
-        if (input === null || input === undefined) {
+        if (input === null || input === undefined || input === '') {
             return 0;
         }
     
@@ -37,7 +37,7 @@ export class CurrencyUtils {
     }
 
     public static IntegerToDecimal(input:any): any {
-        if (input === null || input === undefined) {
+        if (input === null || input === undefined || input === '') {
             return 0; 
         }
 
