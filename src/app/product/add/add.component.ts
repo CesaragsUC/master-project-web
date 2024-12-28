@@ -82,7 +82,7 @@ export class ProductAddComponent  implements OnInit {
         });
         return; 
       }
-
+      
       this.product.price = CurrencyUtils.IntegerToDecimal(this.product.price);
 
       this.productService.addProduct(this.product)
