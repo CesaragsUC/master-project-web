@@ -7,7 +7,7 @@ import { ProductAdd } from "src/app/models/product/product.create";
 import { ApiResponse } from "../api-response/base.response";
 import { ResponseResult } from "../api-response/response.result";
 import { ProductFilter } from "src/app/dtos/product.filter";
-import { Dev } from "src/app/environments/variables";
+import { environment } from "src/environments/environment";
 
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +17,7 @@ export class ProductService extends BaseService {
 
     getAll(filter?: ProductFilter): Observable<ResponseResult<Product[]>> {
         const query = filter ? `?${this.toQueryString(filter)}` : '';
-        const url = `${Dev.apiUrl}catalog/all${query}`;
+        const url = `${environment.apiUrl}catalog/all${query}`;
       
         return this.http
           .get<ResponseResult<Product[]>>(url, super.getAuthHeaderJson())
