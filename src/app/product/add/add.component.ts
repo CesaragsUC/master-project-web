@@ -62,7 +62,7 @@ export class ProductAddComponent  implements OnInit {
     this.messageService.add({severity: 'info', summary: 'Files Uploaded', detail: 'Files uploaded'});
   }
 
-  createProduct()
+  async createProduct()
   {
     this.spinner.show();
 
@@ -70,9 +70,19 @@ export class ProductAddComponent  implements OnInit {
     {
       this.product = Object.assign({}, this.product, this.productForm.value);
 
-      this.convertBlobToBase64(this.uploadedFiles);
+      try {
+        const base64List = await this.convertBlobToBase64(this.uploadedFiles);
+        const base64 = base64List[0]; 
+        this.product.imageBase64 = base64;
+      } catch (error) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: 'Failed to convert file to Base64',
+        });
+        return; 
+      }
 
-      this.product.imageBase64 =  this.base64List[0];
       this.product.price = CurrencyUtils.IntegerToDecimal(this.product.price);
 
       this.productService.addProduct(this.product)
@@ -115,25 +125,26 @@ export class ProductAddComponent  implements OnInit {
   }
 
 
-  convertBlobToBase64(uploads: File[]): void {
-    for (let file of uploads) {
-      const fileReader = new FileReader();
+  convertBlobToBase64(uploads: File[]): Promise<string[]> {
+    const promises = uploads.map(file => {
+      return new Promise<string>((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+          const base64String = fileReader.result as string;
+          const base64Content = this.processBase64String(base64String);
+          resolve(base64Content);
+        };
+        fileReader.onerror = (error) => {
+          reject('Failed to convert file to Base64');
+        };
+        fileReader.readAsDataURL(file);
+      });
+    });
   
-      fileReader.onload = () => {
-        const base64String = (fileReader.result as string);
-        const base64Content = this.processBase64String(base64String);
-  
-        this.base64List.push(base64Content);
-      };
-  
-      fileReader.onerror = (error) => {
-        this.messageService.add({severity: 'error', summary: 'Failed', detail: 'Failed to convert file to Base64'});
-      };
-  
-      fileReader.readAsDataURL(file); 
-    }
+    return Promise.all(promises); // Aguarda todos os arquivos serem convertidos
   }
-
+  
+  
   private processBase64String(base64String: string): string {
     if (base64String.startsWith('data:image')) {
       return base64String.split(',')[1]; // Remove prefix data:image/jpeg;base64
