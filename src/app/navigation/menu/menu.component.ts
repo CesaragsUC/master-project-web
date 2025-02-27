@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { ImportsModule } from 'src/app/imports';
@@ -9,6 +9,7 @@ import { NavMenu } from 'src/app/models/menu/menu';
 import { LocalStorageData } from 'src/app/utils/localstorage';
 import { AuthService } from 'src/app/services/account/auth.service';
 import { Observable } from 'rxjs';
+import { CartService } from 'src/app/services/basket/cart.service';
 
 
 @Component({
@@ -47,18 +48,19 @@ export class MenuComponent implements OnInit {
   menuLogin: NavMenu[] | undefined;
   realTimeData: number;
   localStorage = new LocalStorageData();
+  totalItens: number = 0;
   
   constructor(private responsive: BreakpointObserver,
     private menuService: MenuService,
-    private authService: AuthService) 
+    private authService: AuthService,
+    private cartService: CartService) 
   {
-
+    this.syncCartItemBadge();
   }
-
+  
   ngOnInit(): void {
 
     this.profileItem = this.menuService.profileItem;
-    this.cartItem = this.menuService.cartItem;
     this.menuLogin = this.menuService.menuLogin;
     this.responsiveItems = this.menuService.responsiveItems;
     this.adminMenu = this.menuService.adminMenu;
@@ -89,6 +91,7 @@ export class MenuComponent implements OnInit {
     });
 
   }
+
   get isLoggedIn(): boolean {
     return this.authService.checkLoginStatus();
   }
@@ -101,5 +104,23 @@ export class MenuComponent implements OnInit {
   logout() {
     this.localStorage.clearLocaluserData();
     return this.authService.logout();
+  }
+
+  syncCartItemBadge() {
+    
+    //https://angular.dev/guide/signals
+    effect(() => {
+
+      this.totalItens = this.cartService.noOfItemsInCart() <= 0 ? 
+      this.cartService.totalItenInCart() :
+      this.cartService.noOfItemsInCart();
+
+      this.cartItem = [
+          {
+              ...this.menuService.cartItem[0],
+              badge: this.totalItens > 0 ? this.totalItens.toString() : ''
+          }
+      ];
+     });
   }
 }

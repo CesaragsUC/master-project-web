@@ -22,8 +22,8 @@
                         <a pRipple class="flex align-items-center p-menuitem-link">
                             <span class="ml-2" [routerLink]="item.url">{{ item.label }}</span>
                             <span class="p-overlay-badge">
-                                <i [class]="item.icon"></i>
-                                <span *ngIf="item.badge" class="p-badge">{{ item.badge }}</span>
+                                <i [class]="item.icon" [routerLink]="item.url"></i>
+                                <span  class="p-badge">{{ totalItens }}</span>
                             </span>
                             
                         </a>

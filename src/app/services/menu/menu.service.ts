@@ -4,14 +4,28 @@ import { NavMenu } from "src/app/models/menu/menu";
 @Injectable({ providedIn: 'root' })
 export class MenuService {
 
+    private cartCount = 0;
+
+        getCartCount() {
+            return this.cartCount;
+        }
+
+        addToCart() {
+            this.cartCount++;
+            this.updateCartBadge();
+        }
+
+        updateCartBadge() {
+            this.cartItem[0].badge = this.cartCount.toString(); // Atualiza o badge no menu
+        }
+
     public cartItem: NavMenu[] = [
-        {
+    {
             label: '',
             icon: 'pi pi-cart-minus text-3xl',
-            badge: '3',
-            exact: true,
-            active: true
-        }];
+            badge: '0',
+            url: 'cart/details'
+    }];
     
      public profileItem: NavMenu[]= [
           {
@@ -68,7 +82,7 @@ export class MenuService {
           label: 'Cart',
           icon: 'pi pi-cart-minus',
           badge: '3',
-          url: ''
+          url: 'cart'
         },
         {
             label: 'Admin Area',

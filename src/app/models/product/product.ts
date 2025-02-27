@@ -10,4 +10,5 @@
     active?: boolean;
     imageUri?: string;
     rating?: number;
+    productId?: string;
   }

@@ -48,7 +48,7 @@ export class ProductListComponent {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private fb: FormBuilder,
-    private router: Router,) {}
+    private router: Router) {}
 
     spinner = inject(NgxSpinnerService);
 

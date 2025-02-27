@@ -28,6 +28,11 @@ export const routes: Routes = [
       .then(m => m.AccountModule),
     },
     {
+        path:'cart', 
+        loadChildren: () => import('./basket/module/cart.module') //lazy loading
+        .then(m => m.CartModule),
+    },
+    {
         path: 'access-denied',
         component: AccessDeniedComponent, // Sua página de acesso negado
     },
