@@ -8,6 +8,7 @@ import { Product } from "src/app/models/product/product";
 import { LocalStorageData } from "src/app/utils/localstorage";
 import { RemoteItemRequest } from "src/app/models/basket/remote.item";
 import { UpdateCartRequest } from "src/app/models/basket/update.cart";
+import { ResponseResult } from "../api-response/response.result";
 
 
 @Injectable({ providedIn: 'root' })
@@ -19,9 +20,9 @@ export class CartService extends BaseService {
     //https://tejas-variya.medium.com/level-up-your-reactivity-exploring-angular-signals-380127c7a261
     public noOfItemsInCart = signal<number>(0);
 
-    getCart(customerId: string): Observable<Cart> {
+    getCart(customerId: string): Observable<ResponseResult<Cart>> {
         return this.http
-            .get<Cart>(this.urlService + "cart/" + customerId, super.getAuthHeaderJson())
+            .get<ResponseResult<Cart>>(this.urlService + "cart/" + customerId, super.getAuthHeaderJson())
             .pipe(catchError(super.serviceError));
     }
 
@@ -65,71 +66,131 @@ export class CartService extends BaseService {
                 catchError(super.serviceError));
     } 
 
-    addToCart(newProduct: Product): void {
+    addToCart(newProduct: Product): boolean {
 
-        this.shoppingCart = this.getCartFromLocalStorage();
+        try {
 
-        if (this.itemExistsInCart(newProduct.productId)) {
-            console.log("Este produto já está no carrinho!");
-            return;
-        }
+            this.shoppingCart = this.getCartFromLocalStorage();
 
-        var carItem : CartItens = {
-            productName: newProduct.name,
-            productId: newProduct.productId,
-            quantity: 1,
-            unitPrice: newProduct.price,
-            imageUrl: newProduct.imageUri,
-        }
+            if (this.itemExistsInCart(newProduct.productId)) {
+                console.log("Product already in cart !");
+                return false;
+            }
+    
+            var carItem : CartItens = {
+                productName: newProduct.name,
+                productId: newProduct.productId,
+                quantity: 1,
+                unitPrice: newProduct.price,
+                imageUrl: newProduct.imageUri,
+            }
 
-        this.shoppingCart.customerId = this.localStorage.getUser().id;
-        this.shoppingCart.userName = this.localStorage.getUser().name;
-        this.shoppingCart.items.push(carItem);
-        this.shoppingCart.totalPrice = this.shoppingCart.items.reduce((acc, item) => acc + item.totalPrice, 0);
+            carItem.totalPrice = carItem.unitPrice * carItem.quantity;
+    
+            this.shoppingCart.customerId = this.localStorage.getUser().id;
+            this.shoppingCart.userName = this.localStorage.getUser().name;
+            this.shoppingCart.items.push(carItem);
+            this.shoppingCart.totalPrice = this.shoppingCart.items.reduce((acc, item) => acc + item.totalPrice, 0);
+            this.shoppingCart.subTotal = this.shoppingCart.totalPrice;
+    
+            this.saveCartLocalStorage(this.shoppingCart);
+    
+            this.saveCart(this.shoppingCart).subscribe({
+                next: (sucesso: any) => { this.processarSucesso(sucesso) },
+                error: (falha: any) => { this.processarFalha(falha) }
+            });
+    
+    
+            this.noOfItemsInCart.update((value:number) => this.totalItenInCart());
 
-        this.saveCartLocalStorage(this.shoppingCart);
+        } catch (error) {
+            console.error('Failed to add item to cart', error);
+            return false;
+        }   
 
-        this.saveCart(this.shoppingCart).subscribe({
-            next: (sucesso: any) => { this.processarSucesso(sucesso) },
-            error: (falha: any) => { this.processarFalha(falha) }
-        });
-
-
-        this.noOfItemsInCart.update((value:number) => this.totalItenInCart());
-
-        console.log("Produto adicionado ao carrinho!");
+        return true;
     }
     
-    // public addToCart(product: Product):void {
+    updaCartLocalStorage(productId: string, quantity: number): boolean 
+    {
+        try {
 
-    //     if(this.itemAlreadyAdd(product)) return;
+            this.shoppingCart= this.getCartFromLocalStorage();
 
-    //     //save cairt iten localStorage;    
-    //     this.saveItemLocalStorage(product);
-
-    //     var carItem : CartItens = {
-    //         productName: product.name,
-    //         productId: product.productId,
-    //         quantity: 1,
-    //         unitPrice: product.price,
-    //     }
-            
-    //     this.cart.items.push(carItem);
-
-
-    //      this.cart.customerId = this.localStorage.getUser().id;
-    //      this.cart.userName = this.localStorage.getUser().name;
-    //      this.cart.subTotal = (this.cart.items ?? []).reduce((acc, item) => acc + (item.totalPrice ?? 0), 0);
-
-    //     this.saveCart(this.cart).subscribe({
-    //         next: (sucesso: any) => { this.processarSucesso(sucesso) },
-    //         error: (falha: any) => { this.processarFalha(falha) }
-    //     });
-
-
-    //     this.noOfItemsInCart.update((value:number) => this.totalItenInCart()); 
-    // }
+            if (!Array.isArray(this.shoppingCart.items)) {
+                this.shoppingCart.items = [];
+                return false;
+            }
     
+           // 3. Encontrar o item e atualizar a quantidade
+            const itemIndex = this.shoppingCart.items.findIndex((item: any) => item.productId === productId);
+    
+            if (itemIndex !== -1) {
+                
+                this.shoppingCart.items[itemIndex].quantity = quantity;
+                this.shoppingCart.items[itemIndex].totalPrice = this.shoppingCart.items[itemIndex].unitPrice * quantity;
+    
+                this.shoppingCart.totalPrice = this.shoppingCart.items.reduce((acc, item) => acc + (item.totalPrice ?? 0), 0);
+                this.shoppingCart.subTotal = this.shoppingCart.totalPrice;
+
+                this.saveCartLocalStorage(this.shoppingCart);
+            }
+            else    
+            {
+                return false;
+            }
+
+        }catch (error) {
+
+            console.error('Failed to update cart', error);
+            return false;
+        }
+
+        return true;
+    }
+
+    removeItemCartLocalStorage(productId: string): boolean  
+    {
+        try {
+
+            this.shoppingCart = this.getCartFromLocalStorage();
+
+            if (!this.shoppingCart || !this.shoppingCart.items)  return false; 
+    
+            this.shoppingCart.items = this.shoppingCart.items.filter(item => item.productId !== productId);
+    
+            this.shoppingCart.totalPrice = this.shoppingCart.items.reduce((acc, item) => acc + item.totalPrice, 0);
+            this.shoppingCart.subTotal = this.shoppingCart.totalPrice;
+    
+            this.saveCartLocalStorage(this.shoppingCart);
+
+        } catch (error) {
+            console.error('Failed to remove item from cart', error);
+            return false;
+            
+        }
+
+        return true;
+    }
+
+    updateTotalPrice(totalprice:number): void {
+
+        try {
+
+            this.shoppingCart = this.getCartFromLocalStorage();
+
+            if (!this.shoppingCart || !this.shoppingCart.items)  return; 
+
+            this.shoppingCart.totalPrice = totalprice;
+
+            this.saveCartLocalStorage(this.shoppingCart);
+
+        } catch (error) {
+            console.error('Failed to update total price', error);
+
+        }
+    }
+
     itemExistsInCart(productId: string): boolean {
 
         const cart = this.getCartFromLocalStorage();
@@ -157,7 +218,7 @@ export class CartService extends BaseService {
         if (response.succeeded) 
         {
             this.shoppingCart.items = [];
-            console.log('Item added to cart');
+            console.log('Car saved');
         };
     }
   

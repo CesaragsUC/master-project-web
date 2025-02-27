@@ -146,3 +146,12 @@ a:hover{
     background-position-x: 95%;
     background-position-y: center;
 }
+
+.custom-btn {
+    background: none !important; /* Remove o fundo */
+    border: none !important; /* Remove a borda */
+    box-shadow: none !important; /* Remove sombra */
+    color: black !important; /* Cor do ícone */
+    font-size: 1.2rem !important; /* Tamanho do ícone */
+    padding: 0 !important; /* Remove espaçamento interno */
+}

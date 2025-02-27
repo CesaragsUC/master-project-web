@@ -5,6 +5,7 @@ export interface Cart {
     subTotal?: number;
     userName?: string;
     couponCode?: string;
+    discountApplied?:number;
 }
 
 export interface CartItens {

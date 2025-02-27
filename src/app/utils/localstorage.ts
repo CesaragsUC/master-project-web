@@ -1,3 +1,4 @@
+import { Cart } from "../models/basket/cart";
 import { LoginResponse, UserToken } from "../models/login/login.response";
 
 export class LocalStorageData {
@@ -26,6 +27,11 @@ export class LocalStorageData {
 
     public getUserToken(): string | null {
         return localStorage.getItem('casoft.access_token');
+    }
+
+    public getCart(): Cart  {
+        const cart = localStorage.getItem('cart');
+        return cart ? JSON.parse(cart) : null;
     }
 
     public saveUserToken(token: string) {

@@ -1,5 +1,5 @@
 export interface UpdateCartRequest {
-    cutomerId?: string;
+    customerId?: string;
     productId?: string;
     quantity?: number;
  }
