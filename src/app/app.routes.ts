@@ -33,6 +33,11 @@ export const routes: Routes = [
         .then(m => m.CartModule),
     },
     {
+        path:'billing', 
+        loadChildren: () => import('./billing/module/payment.module') //lazy loading
+        .then(m => m.PaymentModule),
+    },
+    {
         path: 'access-denied',
         component: AccessDeniedComponent, // Sua página de acesso negado
     },

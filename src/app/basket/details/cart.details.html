@@ -44,13 +44,13 @@
                 </form>
                 <div  class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col" style="color:chocolate;">Discount</div>
-                    <div  class="col text-right" style="font-weight: bold;color:rgb(6, 139, 77);">- $ {{ discountApplied }}</div>
+                    <div  class="col text-right" style="font-weight: bold;color:rgb(6, 139, 77);">- $ {{ totalDiscountApplied }}</div>
                 </div>
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
                     <div  class="col text-right" style="font-weight: bold;">$ {{ totalPrice }}</div>
                 </div>
-                <p-button label="CHECKOUT" severity="info" (click)="checkout()" />
+                <p-button label="CONFIRM" severity="info" (click)="checkout()" />
             </div>
         </div>
         
