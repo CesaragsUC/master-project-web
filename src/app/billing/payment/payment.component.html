@@ -1,0 +1,33 @@
+<section class="component">
+    <div class="total">
+      <h3>TOTAL</h3>
+      <p>$ {{ totalAmount }}</p>
+    </div>
+  
+    <div class="credit-card">
+      <h2>Payment</h2>
+      <form (ngSubmit)="sendPayment()" [formGroup]="cardForm">
+        <!-- Apenas Texto -->
+        <input type="text" placeholder="NAME" formControlName="holder" id="holder" />
+  
+        <div class="line">
+          <!-- Apenas Números com Máscara -->
+          <input type="text" placeholder="NUMBER" formControlName="cardNumber" id="cardNumber" 
+                 maxlength="19" (input)="formatCardNumber($event)" />
+        </div>
+  
+        <div class="line">
+          <!-- Data no formato MM-YYYY -->
+          <input class="litle" type="text" placeholder="EXPIRY" formControlName="expirationDate" 
+                 id="expirationDate" maxlength="7" (input)="formatExpirationDate($event)" />
+  
+          <!-- CVV apenas com 3 dígitos -->
+          <input class="tall" type="text" placeholder="CCV" formControlName="securityCode" 
+                 id="securityCode" maxlength="3" (keypress)="onlyNumbers($event)" />
+        </div>
+  
+        <button type="submit" class="valid-button" [disabled]="!cardForm.valid">BUY</button>
+      </form>
+    </div>
+  </section>
+  

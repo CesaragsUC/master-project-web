@@ -173,7 +173,7 @@ export class CartService extends BaseService {
         return true;
     }
 
-    updateTotalPrice(totalprice:number): void {
+    adjustTotalPrice(totalprice:number, subtotal: number, discountApplied: number): void {
 
         try {
 
@@ -182,6 +182,8 @@ export class CartService extends BaseService {
             if (!this.shoppingCart || !this.shoppingCart.items)  return; 
 
             this.shoppingCart.totalPrice = totalprice;
+            this.shoppingCart.subTotal = subtotal;
+            this.shoppingCart.discountApplied = discountApplied;
 
             this.saveCartLocalStorage(this.shoppingCart);
 

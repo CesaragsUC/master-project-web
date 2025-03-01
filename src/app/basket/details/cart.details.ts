@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { NgxSpinnerComponent, NgxSpinnerService } from "ngx-spinner";
 import { switchMap } from "rxjs";
 import { ImportsModule } from "src/app/imports";
@@ -29,12 +29,15 @@ export class CartDetailsComponent extends BaseService implements OnInit {
 
   discountForm :FormGroup;
   cartService = inject(CartService);
+  orderService = inject(CartService);
   spinner = inject(NgxSpinnerService);
   customerId :string;
+  customeName :string;
   couponCode :string = '';
   discountApplied: number = 0;
+  subtotal: number = 0;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private router: Router) {
     super();
 
     this.discountForm = this.fb.group({
@@ -47,10 +50,12 @@ export class CartDetailsComponent extends BaseService implements OnInit {
       this.spinner.show();
 
      this.customerId = this.localStorage.getUser().id;
+     this.customeName = this.localStorage.getUser().name;
 
       this.cartService.getCart(this.customerId).subscribe({
         next: (cart) => {
           this.shoppingCart = cart.data;
+          this.shoppingCart.userName = this.customeName;
         },
         error: (error) => {
           console.error("fail to load cart", error);
@@ -123,7 +128,10 @@ export class CartDetailsComponent extends BaseService implements OnInit {
 
   checkout()
   {
-
+    this.orderService.checkout(this.shoppingCart).subscribe({
+      next: (sucesso: any) => { this.processarCheckoutSucesso(sucesso) },
+      error: (falha: any) => { this.processarCheckoutFalha(falha) }
+    });
   }
 
   applyDiscount() {
@@ -141,7 +149,7 @@ export class CartDetailsComponent extends BaseService implements OnInit {
       next: (updatedCart) => {
         this.shoppingCart = updatedCart.data;
         this.discountApplied = this.shoppingCart.discountApplied;
-        this.cartService.updateTotalPrice(this.shoppingCart.totalPrice);
+        this.cartService.adjustTotalPrice(this.shoppingCart.totalPrice,this.shoppingCart.subTotal,this.discountApplied);
       },
       error: (error) => {
         console.error("Failed to apply discount:", error);
@@ -160,7 +168,7 @@ export class CartDetailsComponent extends BaseService implements OnInit {
       if (response.succeeded) 
       {
           //this.router.navigate(['/products']);
-          console.log('Car saved');
+          console.log('request succeed');
       };
   }
 
@@ -172,7 +180,26 @@ export class CartDetailsComponent extends BaseService implements OnInit {
      ? errorMessages.map((msg: string) => `- ${msg}`).join('\n') 
      : 'An unexpected error occurred.';
 
-     console.error('Failed to add item to cart', detailMessage);
+     console.error('An unexpected error occurred during request', detailMessage);
+  }
+
+  processarCheckoutSucesso(response: any) 
+  {
+      if (response.succeeded) 
+      {
+        this.router.navigate(['/billing/payment']);
+      };
+  }
+
+  processarCheckoutFalha(fail: any) {
+
+    const errorMessages = fail.error?.messages;
+
+     const detailMessage = Array.isArray(errorMessages) 
+     ? errorMessages.map((msg: string) => `- ${msg}`).join('\n') 
+     : 'An unexpected error occurred.';
+
+     console.error('Error occurring during checkout', detailMessage);
   }
 
   get totalPrice(): number {
@@ -183,6 +210,11 @@ export class CartDetailsComponent extends BaseService implements OnInit {
     return this.localStorage.getCart().subTotal;
  
   }
+  get totalDiscountApplied(): number {
+    return this.localStorage.getCart().discountApplied;
+ 
+  }
+
   shoppingCart: Cart = {
         customerId: '',
         totalPrice: 0,
