@@ -34,6 +34,10 @@ export class LocalStorageData {
         return cart ? JSON.parse(cart) : null;
     }
 
+    public clearCart() {
+        localStorage.removeItem('cart');
+    }
+
     public saveUserToken(token: string) {
         localStorage.setItem('casoft.access_token', token);
     }

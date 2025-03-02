@@ -34,6 +34,14 @@ export class CartService extends BaseService {
                 catchError(super.serviceError));
     }   
 
+    deleteCart(customerId: string): Observable<ApiResponse> {
+        return this.http
+            .delete(this.urlService + "cart/delete?customerId=" + customerId, super.getAuthHeaderJson())
+            .pipe(
+                map(super.extractApiResponse),
+                catchError(super.serviceError));
+    } 
+
     updateCart(cart: UpdateCartRequest): Observable<ApiResponse> {
         return this.http
             .put(this.urlService + "cart/update/", cart, super.getAuthHeaderJson())
@@ -213,6 +221,21 @@ export class CartService extends BaseService {
     public totalItenInCart(): number {
         const cart = this.getCartFromLocalStorage();
         return cart.items.length;
+    }
+
+    public resetCart(): void {
+
+        this.shoppingCart = {
+                customerId: '',
+                totalPrice: 0,
+                items: [],
+                subTotal: 0,
+                userName: '',
+                couponCode: ''
+        };
+
+        this.noOfItemsInCart.set(0);
+        this.saveCartLocalStorage(this.shoppingCart);
     }
     
     processarSucesso(response: any) 
