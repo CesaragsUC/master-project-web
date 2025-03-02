@@ -1,8 +1,13 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { NavMenu } from "src/app/models/menu/menu";
+import { LocalStorageData } from "src/app/utils/localstorage";
+import { AuthService } from "../account/auth.service";
 
 @Injectable({ providedIn: 'root' })
 export class MenuService {
+
+    localStorage = new LocalStorageData();
+    authService = inject(AuthService);
 
     private cartCount = 0;
 
@@ -79,14 +84,16 @@ export class MenuService {
             url: 'home'
         },
         {
-          label: 'Cart',
-          icon: 'pi pi-cart-minus',
-          badge: '3',
-          url: 'cart'
-        },
-        {
             label: 'Admin Area',
-            icon: 'pi pi-objects-column'
+            icon: 'pi pi-objects-column',
+            items: [
+            { label: 'Orders', icon: 'pi pi-box', url: ''},
+            { label: 'Products', icon: 'pi pi-list', url: 'products' },
+            { label: 'Payments', icon: 'pi pi-money-bill',url: '' },
+            { label: 'Shipments', icon: 'pi pi-truck',  url: '' },
+            { label: 'Customers', icon: 'pi pi-users', url: '' },
+            { label: 'Charts', icon: 'pi pi-gauge', url: '' }
+            ]
         },
         {
             label: 'Account',
@@ -97,7 +104,7 @@ export class MenuService {
               { label: 'My Coupons', icon: 'pi pi-ticket',url: 'products' },
               { label: 'Profile', icon: 'pi pi-cog',  url: '' },
               { label: 'Notifications', icon: 'pi pi-bell', badge: '2', url: '' },
-              { label: 'Logout', icon: 'pi pi-sign-out', url: '' }
+              { label: 'Logout', icon: 'pi pi-sign-out', url: '', command: () => this.logout() }
             ]
         }
     ];
@@ -123,4 +130,9 @@ export class MenuService {
             url: 'home'
         }
     ];
+
+    logout() {
+        this.localStorage.clearLocaluserData();
+        return this.authService.logout();
+      }
 }

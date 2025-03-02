@@ -169,7 +169,8 @@ export class CartService extends BaseService {
     
             this.shoppingCart.totalPrice = this.shoppingCart.items.reduce((acc, item) => acc + item.totalPrice, 0);
             this.shoppingCart.subTotal = this.shoppingCart.totalPrice;
-    
+            this.noOfItemsInCart.set(this.shoppingCart.items.length);
+
             this.saveCartLocalStorage(this.shoppingCart);
 
         } catch (error) {

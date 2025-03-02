@@ -87,7 +87,7 @@ export class MenuComponent implements OnInit {
         else
           this.menuItems = [...this.menuHome];
       }
-       //console.log('responsive', this.isResponsive);
+       console.log('responsive', this.isResponsive);
     });
 
   }
