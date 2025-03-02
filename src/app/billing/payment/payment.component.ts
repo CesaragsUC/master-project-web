@@ -6,6 +6,7 @@ import { NgxSpinnerComponent, NgxSpinnerService } from "ngx-spinner";
 import { ImportsModule } from "src/app/imports";
 import { CreatePayment, CreditCard } from "src/app/models/billing/create.payment";
 import { BaseService } from "src/app/services/base.service";
+import { CartService } from "src/app/services/basket/cart.service";
 import { OrderService } from "src/app/services/orders/order.service";
 import { PaymentService } from "src/app/services/payment/payment.service";
 
@@ -26,6 +27,7 @@ import { PaymentService } from "src/app/services/payment/payment.service";
 export class PaymentComponent extends BaseService implements OnInit {
 
        paymentService = inject(PaymentService);
+       cartService = inject(CartService);
        orderService = inject(OrderService);
        spinner = inject(NgxSpinnerService);
        customerId :string;
@@ -127,10 +129,15 @@ export class PaymentComponent extends BaseService implements OnInit {
     {
         if (response.succeeded) 
         {
-            this.router.navigate(['billing/created']);
+          this.localStorage.clearCart();
+          this.cartService.resetCart();
+          this.cartService.deleteCart(this.customerId).subscribe();
+
+          this.router.navigate(['billing/created']);
 
         }else {
-            this.router.navigate(['billing/failed']);
+          // pagina de erro, pois se deu erro houve falha durante o rqeust por alguma excepetion ou rega de negocio
+            this.router.navigate(['billing/error']);
         }
         
     }
