@@ -40,7 +40,7 @@ export class MenuService {
               label: 'My Account',
               items: [
                   { label: 'Wish List', icon: 'pi pi-heart', shortcut: '⌘+N' },
-                  { label: 'My Orders', icon: 'pi pi-list', shortcut: '⌘+S',url: 'products' },
+                  { label: 'My Orders', icon: 'pi pi-list', shortcut: '⌘+S',url: '/account/my-orders' },
                   { label: 'My Coupons', icon: 'pi pi-ticket', shortcut: '⌘+S',url: 'products' },
               ]
           },
@@ -100,7 +100,7 @@ export class MenuService {
             icon: 'pi pi-user',
             items: [
               { label: 'Wish List', icon: 'pi pi-heart', url: ''},
-              { label: 'My Orders', icon: 'pi pi-list', url: 'products' },
+              { label: 'My Orders', icon: 'pi pi-list', url: '/account/my-orders' },
               { label: 'My Coupons', icon: 'pi pi-ticket',url: 'products' },
               { label: 'Profile', icon: 'pi pi-cog',  url: '' },
               { label: 'Notifications', icon: 'pi pi-bell', badge: '2', url: '' },

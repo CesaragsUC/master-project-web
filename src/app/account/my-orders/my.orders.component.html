@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+
+        <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" 
+        size = "medium" color = "#fff" 
+        type = "ball-scale-multiple" 
+        [fullScreen] = "true">
+        <p style="color: white" > Loading... </p>
+        </ngx-spinner>
+
+        <h1>My Orders</h1>
+        <table style="margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order date</th>
+                    <th>Status</th>
+                    <th>$ Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of orders">
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.createdAt | date:'yyyy/MM/dd' }}</td>
+                    <td *ngIf="order.status == 9" class="status failed"> Declined</td>
+                    <td *ngIf="order.status == 1" class="status pending">Payment Pending</td>
+                    <td *ngIf="order.status == 3" class="status completed">Paid</td>
+                    <td>$ {{ order.totalAmount }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
