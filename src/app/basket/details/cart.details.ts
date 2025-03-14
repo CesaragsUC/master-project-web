@@ -6,6 +6,8 @@ import { NgxSpinnerComponent, NgxSpinnerService } from "ngx-spinner";
 import { switchMap } from "rxjs";
 import { ImportsModule } from "src/app/imports";
 import { Cart } from "src/app/models/basket/cart";
+import { DiscountRequest } from "src/app/models/basket/discount.request";
+import { DiscountResultResponse } from "src/app/models/basket/discount.response";
 import { RemoteItemRequest } from "src/app/models/basket/remote.item";
 import { UpdateCartRequest } from "src/app/models/basket/update.cart";
 import { BaseService } from "src/app/services/base.service";
@@ -143,13 +145,18 @@ export class CartDetailsComponent extends BaseService implements OnInit {
         this.shoppingCart = cart.data;
         this.shoppingCart.couponCode = this.discountForm.get('couponCode').value;
       
-        return this.cartService.applyDiscount(this.shoppingCart);
+        this.discountRequest.customerId = this.shoppingCart.customerId;
+        this.discountRequest.couponCode = this.shoppingCart.couponCode;
+        this.discountRequest.totalPrice = this.shoppingCart.totalPrice;
+
+        return this.cartService.applyDiscount(this.discountRequest);
+
       })
     ).subscribe({
       next: (updatedCart) => {
-        this.shoppingCart = updatedCart.data;
-        this.discountApplied = this.shoppingCart.discountApplied;
-        this.cartService.adjustTotalPrice(this.shoppingCart.totalPrice,this.shoppingCart.subTotal,this.discountApplied);
+        this.discountResponse = updatedCart.data;
+        this.discountApplied = this.discountResponse.discountApplied;
+        this.cartService.adjustTotalPrice(this.discountResponse.totalPrice,this.discountResponse.subTotal,this.discountApplied);
       },
       error: (error) => {
         console.error("Failed to apply discount:", error);
@@ -223,4 +230,16 @@ export class CartDetailsComponent extends BaseService implements OnInit {
         userName: '',
         couponCode: ''
   };
+
+  discountRequest: DiscountRequest = {
+    customerId: '',
+    couponCode: '',
+    totalPrice: 0
+  }
+
+  discountResponse: DiscountResultResponse = {
+    subTotal: 0,
+    discountApplied: 0,
+    totalPrice: 0
+  }
 }

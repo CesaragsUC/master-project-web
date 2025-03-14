@@ -1,9 +1,3 @@
-// export const environment = {
-//   production: true,
-//   apiUrl: 'http://localhost:5214/casoft/',
-//   imagensUrl: 'http://localhost:5214/'
-// };
-
   export const environment = {
     production: false,
     apiUrl: 'https://localhost:7003/casoft/',

@@ -131,7 +131,6 @@ export class PaymentComponent extends BaseService implements OnInit {
         {
           this.localStorage.clearCart();
           this.cartService.resetCart();
-          this.cartService.deleteCart(this.customerId).subscribe();
 
           this.router.navigate(['billing/created']);
 

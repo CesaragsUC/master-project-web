@@ -9,6 +9,7 @@ import { LocalStorageData } from "src/app/utils/localstorage";
 import { RemoteItemRequest } from "src/app/models/basket/remote.item";
 import { UpdateCartRequest } from "src/app/models/basket/update.cart";
 import { ResponseResult } from "../api-response/response.result";
+import { DiscountRequest } from "../../models/basket/discount.request";
 
 
 @Injectable({ providedIn: 'root' })
@@ -66,9 +67,9 @@ export class CartService extends BaseService {
                 catchError(super.serviceError));
     }  
 
-    applyDiscount(cart: Cart): Observable<ApiResponse> {
+    applyDiscount(discountRequest: DiscountRequest): Observable<ApiResponse> {
         return this.http
-            .post(this.urlService + "cart/discount/", cart, super.getAuthHeaderJson())
+            .post(this.urlService + "cart/discount/", discountRequest, super.getAuthHeaderJson())
             .pipe(
                 map(super.extractApiResponse),
                 catchError(super.serviceError));
