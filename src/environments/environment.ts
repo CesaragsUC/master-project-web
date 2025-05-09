@@ -1,7 +1,7 @@
   export const environment = {
     production: false,
-    apiUrl: 'https://localhost:7003/casoft/',
-    imagensUrl: 'https://localhost:7003/'
+    apiUrl: window.env.API_URL,
+    imagesUrl: window.env.IMAGES_URL
   };
   
   //credits:

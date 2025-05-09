@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:5214/casoft/',
-    imagensUrl: 'http://localhost:5214/'
+    apiUrl: window.env.API_URL,
+    imagesUrl: window.env.IMAGES_URL
   };
   
