@@ -20,7 +20,7 @@ FROM nginx:1.25
 RUN apt-get update && apt-get install -y gettext-base
 
 # Copie a configuração do nginx e os ativos compilados
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist/example-app /usr/share/nginx/html
 
 # Gere env.js a partir do modelo em tempo de execução e inicie o nginx
